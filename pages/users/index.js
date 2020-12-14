@@ -1,6 +1,7 @@
-import UserCard from "../../components/userCard";
-import Link from "next/link";
 import Head from "next/head";
+import Link from "next/link";
+
+import UserCard from "../../components/userCard";
 
 export default function Users({ users }) {
   return (
@@ -8,7 +9,7 @@ export default function Users({ users }) {
       <Head>
         <title>Users</title>
       </Head>
-      <div className="grid grid-template-columns gap-x-6 p-16">
+      <div className="grid p-16 grid-template-columns gap-x-6">
         {users.map((user) => (
           <Link key={user.id} href={`/users/${user.id}`}>
             <a>
@@ -26,11 +27,9 @@ export default function Users({ users }) {
   );
 }
 
-Users.getInitialProps = async (context) => {
-  try {
-    const users = await (
-      await fetch("https://jsonplaceholder.typicode.com/users")
-    ).json();
-    return { users };
-  } catch (error) {}
+Users.getInitialProps = async () => {
+  const users = await (
+    await fetch("https://jsonplaceholder.typicode.com/users")
+  ).json();
+  return { users };
 };

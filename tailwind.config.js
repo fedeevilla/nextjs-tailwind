@@ -1,13 +1,6 @@
 module.exports = {
   purge: ["./components/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}"],
   darkMode: "media", // 'media' or 'class'
-  theme: {
-    extend: {
-      colors: {
-        "accent-1": "#333",
-      },
-    },
-  },
   corePlugins: {
     fontFamily: false,
     pointerEvents: true,
@@ -21,6 +14,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "accent-1": "#333",
         gray: {
           20: "#f7f9fa",
           30: "#e5e9ec",

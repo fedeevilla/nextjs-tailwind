@@ -1,16 +1,19 @@
-import Link from "next/link";
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+
 import PostCard from "../../components/postCard";
 export default function User({ user }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () =>
-    await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
-
   useEffect(() => {
     // Client-Side Rendering
+    const fetchData = async () =>
+      await fetch(
+        `https://jsonplaceholder.typicode.com/posts?userId=${user.id}`
+      );
+
     fetchData()
       .then((res) => {
         res
@@ -22,7 +25,7 @@ export default function User({ user }) {
           .catch(() => setLoading(false));
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [user.id]);
 
   return (
     <>
@@ -76,13 +79,11 @@ export default function User({ user }) {
 }
 
 User.getInitialProps = async (context) => {
-  try {
-    const user = await (
-      await fetch(
-        `https://jsonplaceholder.typicode.com/users/${context.query.id}`
-      )
-    ).json();
+  const user = await (
+    await fetch(
+      `https://jsonplaceholder.typicode.com/users/${context.query.id}`
+    )
+  ).json();
 
-    return { user };
-  } catch (error) {}
+  return { user };
 };
