@@ -5,19 +5,23 @@ import PostCard from "../../components/postCard";
 
 export default function User({ user }) {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () =>
     await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
 
   useEffect(() => {
-    fetchData().then((res) => {
-      setLoading(true);
-      res.json().then((res) => {
-        setPosts(res);
-        setLoading(false);
-      });
-    });
+    fetchData()
+      .then((res) => {
+        res
+          .json()
+          .then((res) => {
+            setPosts(res);
+            setLoading(false);
+          })
+          .catch(() => setLoading(false));
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
@@ -26,7 +30,7 @@ export default function User({ user }) {
         <title>User #{user.id}</title>
       </Head>
       <div>
-        <div className="w-36 m-auto flex justify-center mt-2 mb-12 bg-gray-30 rounded-xl cursor-pointer">
+        <div className="flex justify-center m-auto mt-2 mb-12 cursor-pointer w-36 bg-gray-30 rounded-xl">
           <Link href="/users">
             <a>Back to users</a>
           </Link>
@@ -36,17 +40,22 @@ export default function User({ user }) {
         <h4 className="text-base text-center text-black">
           {user.company.name}
         </h4>
-        <h4 className="text-xl mt-6 text-center text-black">
-          Posts: {posts.length}
-        </h4>
         {!loading ? (
-          <div className="grid grid-template-columns gap-x-6 p-16">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          <>
+            <h4 className="mt-6 text-xl text-center text-black">
+              Posts: {posts.length}
+            </h4>
+
+            <div className="grid p-16 grid-template-columns gap-x-6">
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </>
         ) : (
-          <h4 className="text-xl mt-6 text-center text-black">Loading</h4>
+          <h4 className="mt-6 text-xl text-center text-black">
+            Loading Posts..
+          </h4>
         )}
         <style jsx>{`
           .grid-template-columns {
